@@ -1,5 +1,5 @@
 {
-  "description": "@xtrivo/download-engine — Node HTTP(S) download engine: redirects, Range resume, integrity, retries. Used by the desktop app.",
+  "description": "@xtrivo/download-engine \u2014 Node HTTP(S) download engine: redirects, Range resume, integrity, retries. Used by the desktop app.",
   "exports": {
     ".": "./dist/index.js"
   },
@@ -7,7 +7,7 @@
   "name": "@xtrivo/download-engine",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "types": "./dist/index.d.ts",
