@@ -1,0 +1,55 @@
+# XTRIVO automated quality & security — weekly + on PRs.
+#
+#
+# Honest scope: GitHub's own secret scanning / push protection / CodeQL are NOT
+# available on private repos without paid upgrades. This workflow uses free,
+# reputable OSS substitutes and documents the residual gap instead of
+# pretending otherwise.
+
+name: Security
+
+on:
+  pull_request:
+    branches: [develop]
+  schedule:
+    - cron: "0 6 * * 1" # weekly, Monday 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  secrets:
+    name: Secret scanning (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dependencies:
+    name: Vulnerability scan (osv-scanner + npm audit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - run: npm install --no-audit --no-fund
+      - name: npm audit (high+ only)
+        run: npm audit --audit-level=high
+      - name: OSV scan
+        uses: google/osv-scanner-action@v1
+        with:
+          scan-args: --recursive ./
+
+  licenses:
+    name: License inventory
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - run: npm install --no-audit --no-fund
+      - run: npx license-checker --summary --onlyAllow "MIT;ISC;Apache-2.0;BSD-2-Clause;BSD-3-Clause;CC0-1.0;Unlicense;0BSD"
