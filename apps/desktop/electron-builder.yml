@@ -1,3 +1,10 @@
+# XTRIVO desktop packaging (electron-builder).
+# NOTE: apps/desktop/node_modules/.gitkeep must stay committed (empty dir).
+# electron-builder 25.x + npm workspaces: if that dir is missing, its
+# "installing production dependencies" step runs `npm install --production`
+# from here, npm resolves the workspace root and prunes ALL devDependencies
+# (including electron-builder itself) -> build fails in ~2s. The dir existing
+# makes it skip the install step. Do not delete the .gitkeep.
 appId: com.xtrivo.app
 productName: XTRIVO
 directories:

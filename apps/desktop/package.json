@@ -13,5 +13,10 @@
     "dist:linux": "electron-builder --linux",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "homepage": "https://github.com/iadeshchandra/Xtrivo",
+  "author": {
+    "name": "XTRIVO",
+    "email": "contact@xtrivo.app"
+  }
 }
