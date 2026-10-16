@@ -1,0 +1,6 @@
+{
+  "description": "@xtrivo/design-system — design tokens (colors, typography, spacing) and logo assets shared by all XTRIVO products.",
+  "name": "@xtrivo/design-system",
+  "type": "module",
+  "version": "0.1.0"
+}
