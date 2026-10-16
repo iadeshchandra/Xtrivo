@@ -1,0 +1,66 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+out/
+.output/
+*.tsbuildinfo
+
+# Android
+apps/android/.gradle/
+apps/android/build/
+apps/android/app/build/
+apps/android/local.properties
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Electron / desktop packaging
+apps/desktop/dist/
+apps/desktop/dist_electron/
+
+# Astro / web
+apps/web/dist/
+apps/web/.astro/
+
+# Extension packaging
+apps/extension/dist/
+*.zip
+
+# Environment & secrets — NEVER commit real values
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+*.p12
+*.pem
+google-services.json
+GoogleService-Info.plist
+*service-account*.json
+
+# Temp downloads & test artifacts
+*.part
+*.crdownload
+tmp/
+temp/
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Firebase
+.firebase/
+.firebaserc
