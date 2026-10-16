@@ -7,8 +7,8 @@
   "name": "xtrivo-web",
   "private": true,
   "scripts": {
-    "build": "astro build",
-    "dev": "astro dev",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "type": "module",
