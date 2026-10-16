@@ -1,0 +1,48 @@
+---
+const title = "XTRIVO — Fast, private downloads everywhere";
+const description = "XTRIVO is a fast, dependable, privacy-conscious download and media management ecosystem for Android, desktop, and your browser.";
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <style>
+      :root { color-scheme: light dark; }
+      body { font-family: Inter, system-ui, sans-serif; margin: 0; }
+      header, main, footer { max-width: 960px; margin: 0 auto; padding: 24px; }
+      nav a { margin-right: 16px; }
+      .hero { padding: 64px 24px; text-align: center; }
+      .hero h1 { font-size: 40px; margin: 0 0 12px; }
+      .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+      .card { border: 1px solid #ccc; border-radius: 12px; padding: 16px; }
+      .scaffold { color: #888; font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav aria-label="Main">
+        <strong>XTRIVO</strong>
+        <a href="/">Home</a><a href="/docs">Docs</a><a href="/download">Download</a>
+      </nav>
+    </header>
+    <main>
+      <section class="hero">
+        <h1>Downloads, done right.</h1>
+        <p>Fast, dependable, privacy-conscious download management for Android, desktop, and your browser.</p>
+        <p class="scaffold">Stage 1 scaffolding — release downloads appear here from Stage 11.</p>
+      </section>
+      <section class="cards">
+        <div class="card"><h2>Android</h2><p>Native download manager, browser, file manager, media player.</p></div>
+        <div class="card"><h2>Desktop</h2><p>Queue, pause/resume, multi-connection speed on Windows, macOS, Linux.</p></div>
+        <div class="card"><h2>Browser extension</h2><p>Catch downloads in Chrome and route them to XTRIVO.</p></div>
+      </section>
+    </main>
+    <footer><p class="scaffold">© 2026 XTRIVO. Privacy-first: your downloads stay on your device.</p></footer>
+  </body>
+</html>

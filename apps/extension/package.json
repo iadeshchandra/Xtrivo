@@ -1,0 +1,15 @@
+{
+  "description": "XTRIVO Chrome extension (Manifest V3).",
+  "devDependencies": {
+    "@types/chrome": "0.0.280",
+    "esbuild": "0.23.1",
+    "typescript": "5.6.3"
+  },
+  "name": "xtrivo-extension",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "version": "0.1.0"
+}

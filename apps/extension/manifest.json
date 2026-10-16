@@ -1,0 +1,15 @@
+{
+  "action": { "default_popup": "popup.html", "default_title": "XTRIVO" },
+  "background": { "service_worker": "background.js" },
+  "description": "Send downloads to XTRIVO — fast, private download management.",
+  "icons": {
+    "128": "icons/icon128.png",
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png"
+  },
+  "manifest_version": 3,
+  "name": "XTRIVO",
+  "options_page": "options.html",
+  "permissions": ["storage", "downloads"],
+  "version": "0.1.0"
+}
