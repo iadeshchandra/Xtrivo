@@ -49,7 +49,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 24, cache: npm }
+        with: { node-version: 24 }
       - run: npm install --no-audit --no-fund
       - run: npm run build --workspace xtrivo-extension
       - run: |
@@ -71,7 +71,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 24, cache: npm }
+        with: { node-version: 24 }
       - run: npm install --no-audit --no-fund
       - run: npm run build --workspace xtrivo-web
       - run: |
@@ -95,7 +95,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 24, cache: npm }
+        with: { node-version: 24 }
       - run: npm install --no-audit --no-fund
       - run: npm run build --workspace xtrivo-desktop
       - run: npx electron-builder --publish never
