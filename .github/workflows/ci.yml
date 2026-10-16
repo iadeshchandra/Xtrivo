@@ -1,0 +1,112 @@
+# XTRIVO CI — runs on PRs and pushes to `develop`.
+# Minutes budget: Linux runners only; Android debug build is the heaviest job.
+# Desktop builds the Linux target here — the full 3-OS matrix runs only in
+# build-all.yml / release.yml (manual), because macOS minutes cost 10x.
+#
+# Lockfile note: package-lock.json is intentionally NOT committed in Stage 1
+# (it exceeds the GitHub App's per-call payload limit). Direct dependencies are
+# exact-pinned in package.json; CI runs `npm install`. Stage 10: owner uploads
+# the lockfile once via web UI, CI flips to `npm ci` + dependency cache.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [develop]
+  push:
+    branches: [develop]
+
+permissions:
+  contents: read
+
+jobs:
+  # ---------------------------------------------------------------- JS/TS --
+  js:
+    name: JS/TS — lint, typecheck, test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --no-audit --no-fund
+      - run: npm run format:check
+      - run: npm run typecheck --workspaces --if-present
+      - run: npm run test --workspaces --if-present
+
+  # ------------------------------------------------------------ extension --
+  extension:
+    name: Extension — build + MV3 validate
+    runs-on: ubuntu-latest
+    needs: js
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --no-audit --no-fund
+      - run: npm run build --workspace xtrivo-extension
+      - name: Validate packaged zip
+        run: |
+          cd apps/extension
+          test -f xtrivo-extension-*.zip
+          unzip -l xtrivo-extension-*.zip | grep -q manifest.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xtrivo-extension
+          path: apps/extension/xtrivo-extension-*.zip
+
+  # ----------------------------------------------------------------- web --
+  web:
+    name: Web — static build
+    runs-on: ubuntu-latest
+    needs: js
+    env:
+      ASTRO_TELEMETRY_DISABLED: 1 # our builds phone home to nobody
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --no-audit --no-fund
+      - run: npm run build --workspace xtrivo-web
+      - run: test -f apps/web/dist/index.html
+
+  # ------------------------------------------------------------- desktop --
+  desktop:
+    name: Desktop — Linux build (smoke)
+    runs-on: ubuntu-latest
+    needs: js
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --no-audit --no-fund
+      - run: npm run build --workspace xtrivo-desktop
+      # Full 3-OS packaging runs in build-all.yml (manual) to protect minutes.
+
+  # ------------------------------------------------------------- android --
+  android:
+    name: Android — debug APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.9
+      - name: Assemble debug APK
+        run: gradle :app:assembleDebug --project-dir apps/android
+      - name: Verify APK signature (debug key)
+        run: |
+          APK=$(ls apps/android/app/build/outputs/apk/debug/*.apk | head -1)
+          ${ANDROID_HOME}/build-tools/34.0.0/apksigner verify --print-certs "$APK" | head -3
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xtrivo-android-debug
+          path: apps/android/app/build/outputs/apk/debug/*.apk
