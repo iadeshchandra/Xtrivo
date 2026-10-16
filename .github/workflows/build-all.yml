@@ -1,4 +1,5 @@
-# XTRIVO full-platform build — manual trigger from the Actions tab.
+# XTRIVO full-platform build — runs automatically on every push to main
+# AND on manual trigger from the Actions tab (with platform/version inputs).
 #
 
 name: Build all platforms
@@ -16,13 +17,20 @@ on:
         description: "Version label for artifacts (e.g. 0.2.0)"
         required: true
         default: 0.1.0
+  push:
+    branches: [main]
 
 permissions:
   contents: read
 
+env:
+  # Artifact version label. Manual runs use the `version` input;
+  # push-triggered runs (no inputs) fall back to the default.
+  XTRIVO_VERSION: ${{ inputs.version || '0.1.0' }}
+
 jobs:
   android:
-    if: inputs.platform == 'all' || inputs.platform == 'android'
+    if: inputs.platform == 'all' || inputs.platform == 'android' || inputs.platform == ''
     name: Android debug APK
     runs-on: ubuntu-latest
     steps:
@@ -42,14 +50,14 @@ jobs:
       - name: Checksums
         run: |
           cd apps/android/app/build/outputs/apk/debug
-          sha256sum *.apk > xtrivo-android-${{ inputs.version }}.sha256
+          sha256sum *.apk > xtrivo-android-${{ env.XTRIVO_VERSION }}.sha256
       - uses: actions/upload-artifact@v4
         with:
-          name: xtrivo-android-${{ inputs.version }}
+          name: xtrivo-android-${{ env.XTRIVO_VERSION }}
           path: apps/android/app/build/outputs/apk/debug/
 
   extension:
-    if: inputs.platform == 'all' || inputs.platform == 'extension'
+    if: inputs.platform == 'all' || inputs.platform == 'extension' || inputs.platform == ''
     name: Extension zip
     runs-on: ubuntu-latest
     steps:
@@ -60,16 +68,16 @@ jobs:
       - run: npm run build --workspace xtrivo-extension
       - run: |
           cd apps/extension
-          sha256sum xtrivo-extension-*.zip > xtrivo-extension-${{ inputs.version }}.sha256
+          sha256sum xtrivo-extension-*.zip > xtrivo-extension-${{ env.XTRIVO_VERSION }}.sha256
       - uses: actions/upload-artifact@v4
         with:
-          name: xtrivo-extension-${{ inputs.version }}
+          name: xtrivo-extension-${{ env.XTRIVO_VERSION }}
           path: |
             apps/extension/xtrivo-extension-*.zip
             apps/extension/*.sha256
 
   web:
-    if: inputs.platform == 'all' || inputs.platform == 'web'
+    if: inputs.platform == 'all' || inputs.platform == 'web' || inputs.platform == ''
     name: Web static bundle
     runs-on: ubuntu-latest
     env:
@@ -82,17 +90,17 @@ jobs:
       - run: npm run build --workspace xtrivo-web
       - run: |
           cd apps/web/dist
-          tar -czf ../xtrivo-web-${{ inputs.version }}.tar.gz .
-          cd .. && sha256sum xtrivo-web-${{ inputs.version }}.tar.gz > xtrivo-web-${{ inputs.version }}.sha256
+          tar -czf ../xtrivo-web-${{ env.XTRIVO_VERSION }}.tar.gz .
+          cd .. && sha256sum xtrivo-web-${{ env.XTRIVO_VERSION }}.tar.gz > xtrivo-web-${{ env.XTRIVO_VERSION }}.sha256
       - uses: actions/upload-artifact@v4
         with:
-          name: xtrivo-web-${{ inputs.version }}
+          name: xtrivo-web-${{ env.XTRIVO_VERSION }}
           path: |
-            apps/web/xtrivo-web-${{ inputs.version }}.tar.gz
-            apps/web/xtrivo-web-${{ inputs.version }}.sha256
+            apps/web/xtrivo-web-${{ env.XTRIVO_VERSION }}.tar.gz
+            apps/web/xtrivo-web-${{ env.XTRIVO_VERSION }}.sha256
 
   desktop:
-    if: inputs.platform == 'all' || inputs.platform == 'desktop'
+    if: inputs.platform == 'all' || inputs.platform == 'desktop' || inputs.platform == ''
     name: Desktop installers (3 OS)
     strategy:
       matrix:
@@ -108,5 +116,5 @@ jobs:
         working-directory: apps/desktop
       - uses: actions/upload-artifact@v4
         with:
-          name: xtrivo-desktop-${{ inputs.version }}-${{ matrix.os }}
+          name: xtrivo-desktop-${{ env.XTRIVO_VERSION }}-${{ matrix.os }}
           path: apps/desktop/dist_electron/
