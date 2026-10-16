@@ -1,0 +1,106 @@
+# XTRIVO full-platform build — manual trigger from the Actions tab.
+#
+
+name: Build all platforms
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: "Platform to build"
+        type: choice
+        required: true
+        default: all
+        options: [all, android, extension, web, desktop]
+      version:
+        description: "Version label for artifacts (e.g. 0.2.0)"
+        required: true
+        default: 0.1.0
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    if: inputs.platform == 'all' || inputs.platform == 'android'
+    name: Android debug APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: 8.9 }
+      - run: gradle :app:assembleDebug --project-dir apps/android
+      - name: Checksums
+        run: |
+          cd apps/android/app/build/outputs/apk/debug
+          sha256sum *.apk > xtrivo-android-${{ inputs.version }}.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xtrivo-android-${{ inputs.version }}
+          path: apps/android/app/build/outputs/apk/debug/
+
+  extension:
+    if: inputs.platform == 'all' || inputs.platform == 'extension'
+    name: Extension zip
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - run: npm install --no-audit --no-fund
+      - run: npm run build --workspace xtrivo-extension
+      - run: |
+          cd apps/extension
+          sha256sum xtrivo-extension-*.zip > xtrivo-extension-${{ inputs.version }}.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xtrivo-extension-${{ inputs.version }}
+          path: |
+            apps/extension/xtrivo-extension-*.zip
+            apps/extension/*.sha256
+
+  web:
+    if: inputs.platform == 'all' || inputs.platform == 'web'
+    name: Web static bundle
+    runs-on: ubuntu-latest
+    env:
+      ASTRO_TELEMETRY_DISABLED: 1 # our builds phone home to nobody
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - run: npm install --no-audit --no-fund
+      - run: npm run build --workspace xtrivo-web
+      - run: |
+          cd apps/web/dist
+          tar -czf ../xtrivo-web-${{ inputs.version }}.tar.gz .
+          cd .. && sha256sum xtrivo-web-${{ inputs.version }}.tar.gz > xtrivo-web-${{ inputs.version }}.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xtrivo-web-${{ inputs.version }}
+          path: |
+            apps/web/xtrivo-web-${{ inputs.version }}.tar.gz
+            apps/web/xtrivo-web-${{ inputs.version }}.sha256
+
+  desktop:
+    if: inputs.platform == 'all' || inputs.platform == 'desktop'
+    name: Desktop installers (3 OS)
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - run: npm install --no-audit --no-fund
+      - run: npm run build --workspace xtrivo-desktop
+      - run: npx electron-builder --publish never
+        working-directory: apps/desktop
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xtrivo-desktop-${{ inputs.version }}-${{ matrix.os }}
+          path: apps/desktop/dist_electron/
