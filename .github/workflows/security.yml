@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 24, cache: npm }
+        with: { node-version: 24 }
       - run: npm install --no-audit --no-fund
       - name: npm audit (high+ only)
         run: npm audit --audit-level=high
@@ -50,6 +50,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 24, cache: npm }
+        with: { node-version: 24 }
       - run: npm install --no-audit --no-fund
       - run: npx license-checker --summary --onlyAllow "MIT;ISC;Apache-2.0;BSD-2-Clause;BSD-3-Clause;CC0-1.0;Unlicense;0BSD"
