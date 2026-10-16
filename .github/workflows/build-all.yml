@@ -64,6 +64,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 24 }
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package.json', 'apps/*/package.json', 'packages/*/package.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
       - run: npm install --no-audit --no-fund
       - run: npm run build --workspace xtrivo-extension
       - run: |
@@ -86,6 +93,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 24 }
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package.json', 'apps/*/package.json', 'packages/*/package.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
       - run: npm install --no-audit --no-fund
       - run: npm run build --workspace xtrivo-web
       - run: |
@@ -110,8 +124,22 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 24 }
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package.json', 'apps/*/package.json', 'packages/*/package.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
       - run: npm install --no-audit --no-fund
       - run: npm run build --workspace xtrivo-desktop
+      - name: Cache Electron
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/electron
+            ~/.cache/electron-builder
+          key: electron-${{ runner.os }}-${{ hashFiles('apps/desktop/package.json') }}
       - run: npx electron-builder --publish never
         working-directory: apps/desktop
       - uses: actions/upload-artifact@v4
