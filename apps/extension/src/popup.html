@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>XTRIVO</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 0;
+        padding: 16px;
+        width: 300px;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 0 0 8px;
+      }
+      p {
+        font-size: 13px;
+        color: #555;
+      }
+      .scaffold {
+        font-size: 12px;
+        color: #999;
+        margin-top: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>XTRIVO</h1>
+    <p>Paste a download link to send it to XTRIVO.</p>
+    <input
+      id="url"
+      type="url"
+      placeholder="https://example.com/file.zip"
+      style="width: 100%"
+    />
+    <button id="send" style="margin-top: 8px">Send to XTRIVO</button>
+    <p id="status" role="status"></p>
+    <p class="scaffold">
+      Stage 1 scaffolding — download detection lands in Stage 5.
+    </p>
+    <script src="popup.js"></script>
+  </body>
+</html>

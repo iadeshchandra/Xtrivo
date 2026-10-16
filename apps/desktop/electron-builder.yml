@@ -1,0 +1,22 @@
+appId: com.xtrivo.app
+productName: XTRIVO
+directories:
+  output: dist_electron
+files:
+  - dist/**/*
+  - package.json
+linux:
+  target:
+    - AppImage
+    - deb
+  category: Network
+win:
+  target:
+    - nsis
+mac:
+  target:
+    - dmg
+  category: public.app-category.utilities
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true

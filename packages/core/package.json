@@ -1,0 +1,19 @@
+{
+  "description": "@xtrivo/core — shared contracts: URL validation, download task state machine, error taxonomy, filename safety.",
+  "devDependencies": {
+    "vitest": "2.1.8"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "name": "@xtrivo/core",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "types": "./dist/index.d.ts",
+  "version": "0.1.0"
+}

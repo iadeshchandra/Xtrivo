@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>XTRIVO Settings</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 0 auto;
+        padding: 24px;
+        max-width: 560px;
+      }
+      label {
+        display: block;
+        margin: 12px 0;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>XTRIVO Settings</h1>
+    <label
+      ><input type="checkbox" id="notifications" /> Show download
+      notifications</label
+    >
+    <label
+      ><input type="checkbox" id="askLocation" checked /> Always ask where to
+      save</label
+    >
+    <p id="saved" role="status"></p>
+    <script src="options.js"></script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "description": "XTRIVO — fast, dependable, privacy-conscious download and media management ecosystem.",
+  "devDependencies": {
+    "prettier": "3.3.3",
+    "typescript": "5.6.3"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "name": "xtrivo",
+  "private": true,
+  "scripts": {
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "version": "0.1.0",
+  "workspaces": [
+    "packages/core",
+    "packages/download-engine",
+    "packages/design-system",
+    "apps/extension",
+    "apps/web",
+    "apps/desktop"
+  ]
+}
