@@ -51,7 +51,7 @@ jobs:
         run: |
           cd apps/android/app/build/outputs/apk/debug
           sha256sum *.apk > xtrivo-android-${{ env.XTRIVO_VERSION }}.sha256
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: xtrivo-android-${{ env.XTRIVO_VERSION }}
           path: apps/android/app/build/outputs/apk/debug/
@@ -76,7 +76,7 @@ jobs:
       - run: |
           cd apps/extension
           sha256sum xtrivo-extension-*.zip > xtrivo-extension-${{ env.XTRIVO_VERSION }}.sha256
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: xtrivo-extension-${{ env.XTRIVO_VERSION }}
           path: |
@@ -106,7 +106,7 @@ jobs:
           cd apps/web/dist
           tar -czf ../xtrivo-web-${{ env.XTRIVO_VERSION }}.tar.gz .
           cd .. && sha256sum xtrivo-web-${{ env.XTRIVO_VERSION }}.tar.gz > xtrivo-web-${{ env.XTRIVO_VERSION }}.sha256
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: xtrivo-web-${{ env.XTRIVO_VERSION }}
           path: |
@@ -142,7 +142,7 @@ jobs:
           key: electron-${{ runner.os }}-${{ hashFiles('apps/desktop/package.json') }}
       - run: npx electron-builder --publish never
         working-directory: apps/desktop
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: xtrivo-desktop-${{ env.XTRIVO_VERSION }}-${{ matrix.os }}
           path: apps/desktop/dist_electron/
