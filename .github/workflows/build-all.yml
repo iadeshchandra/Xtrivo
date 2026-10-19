@@ -39,7 +39,7 @@ jobs:
         with: { distribution: temurin, java-version: 17 }
       # Android SDK is preinstalled on ubuntu-latest (ANDROID_HOME/ANDROID_SDK_ROOT).
       # android-actions/setup-android was failing here, so it is intentionally not used.
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
         with: { gradle-version: 8.9 }
       - run: gradle :app:assembleDebug --project-dir apps/android
       - name: Verify APK signature (debug key)
