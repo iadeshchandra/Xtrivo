@@ -1,9 +1,9 @@
 {
   "description": "XTRIVO Chrome extension (Manifest V3).",
   "devDependencies": {
-    "@types/chrome": "0.0.280",
-    "esbuild": "0.23.1",
-    "typescript": "5.6.3"
+    "@types/chrome": "0.3.5",
+    "esbuild": "0.28.2",
+    "typescript": "7.0.2"
   },
   "name": "xtrivo-extension",
   "private": true,

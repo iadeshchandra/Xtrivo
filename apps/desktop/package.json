@@ -1,9 +1,9 @@
 {
   "description": "XTRIVO desktop app (Electron + TypeScript).",
   "devDependencies": {
-    "electron": "33.2.1",
-    "electron-builder": "25.1.8",
-    "typescript": "5.6.3"
+    "electron": "44.8.0",
+    "electron-builder": "26.15.3",
+    "typescript": "7.0.2"
   },
   "main": "dist/main.js",
   "name": "xtrivo-desktop",
