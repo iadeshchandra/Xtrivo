@@ -1,7 +1,7 @@
 {
   "description": "@xtrivo/core — shared contracts: URL validation, download task state machine, error taxonomy, filename safety.",
   "devDependencies": {
-    "vitest": "2.1.8"
+    "vitest": "5.0.5"
   },
   "exports": {
     ".": "./dist/index.js",
